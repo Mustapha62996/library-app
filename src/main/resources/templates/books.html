@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Books List</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css(v=${#dates.createNow().time})}">
 </head>
 <body>
+    <h1>Welcome <span th:text="${username}"></span></h1>
     <h1 style="text-align:center;">Books</h1>
     <h2>View Books</h2>
 
@@ -30,6 +31,7 @@
             <button type="submit">Publish Book</button>
         </form>
     </div>
+    <a href="/books?logout">Log Out</a>
 
 </body>
 </html>
