@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 @ApplicationScope
 public class UserCredentialsDB {
-    private HashMap<String, String> userCredentials;
+    private final HashMap<String, String> userCredentials = new HashMap<>();
 
     public void addUser(UserCredential userCredential){
         userCredentials.put(userCredential.getUsername(), userCredential.getPassword());
@@ -22,9 +22,6 @@ public class UserCredentialsDB {
     }
 
     public boolean checkExistingUser(String username){
-        if (userCredentials == null){
-            return false;
-        }
         return userCredentials.containsKey(username);
     }
 }

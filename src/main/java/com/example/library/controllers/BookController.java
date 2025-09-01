@@ -3,6 +3,7 @@ package com.example.library.controllers;
 import com.example.library.model.Book;
 import com.example.library.services.BookService;
 import com.example.library.services.LoggedUserManagementService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,9 @@ public class BookController {
 
     @PostMapping("/books")
     public String addBook(Book book, Model model){
-        bookService.addBook(book);
-        var books = bookService.findAll();
+        String username = loggedUserManagementService.getUsername();
+        bookService.addBook(username, book);
+        var books = bookService.findAll(username);
 
         model.addAttribute("books", books);
 
@@ -33,9 +35,11 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public String viewBooks(@RequestParam(required = false) String logout, Model model){
+    public String viewBooks(@RequestParam(required = false) String logout,
+                            Model model, HttpSession session){
         if(logout != null){
-            loggedUserManagementService.setUsername(null);
+            session.invalidate();
+            return "redirect:/";
         }
         String username = loggedUserManagementService.getUsername();
 
@@ -43,7 +47,7 @@ public class BookController {
             return "redirect:/";
         }
 
-        var books = bookService.findAll();
+        var books = bookService.findAll(username);
 
         model.addAttribute("username", username);
         model.addAttribute("books", books);
